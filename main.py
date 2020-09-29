@@ -1,15 +1,22 @@
 import pynput,sys,random,time,pyautogui
 from pynput import mouse,keyboard
-#import tkinter.font as font
 import tkinter as tk
 
 def main():
     mouse_c = mouse.Controller()
     keyboard_c = keyboard.Controller()
 
+    def LOGIC():
+        global STARTED
+        STARTED = False
+
+
+
     def GUI():
+        global BACK_CLR
         BACK_CLR = '#e3e1e8'
 
+        global window
         window = tk.Tk()
         window.title('Clicker')
         window.geometry(("700x300"))
@@ -19,31 +26,77 @@ def main():
         canvas.pack()
         #
         global mouse_pos_label
-        mouse_pos_label = tk.Label(window,text = mouse_c.position,font = 24)
+        mouse_pos_label = tk.Label(window,text = mouse_c.position,font = 24,bg = BACK_CLR)
         mouse_pos_label.after(100,update_mouse_pos)
         mouse_pos_label.place(x = 400,y = 300, width = 100, height = 20)
         #
-        time_btwn_clcks = tk.Scale(window, orient = "horizontal", length = 30, from_ = 0.05, bg = BACK_CLR, font = 20)
-        time_btwn_clcks.place(x = 370,y = 40,width = 160)
+        global time_btwn_clcks
+        time_btwn_clcks = tk.Scale(window, orient = "horizontal", resolution = -1,length = 10000,
+                                   from_ = 0.05, to = 500 ,bg = BACK_CLR, font = 20,
+                                   label = "Click interval (seconds)")
+        time_btwn_clcks.place(x = 5,y = 0,width = 200)
         #
-        start_bttn = tk.Button(window,text = "Start", command = start_cmmnd,bg = BACK_CLR, font = 20)
-        #start_bttn.config(command = start_cmmnd)
+        global start_bttn
+        start_bttn = tk.Button(window,text = "Start", command = switch_to_stop,bg = BACK_CLR, font = 20)
         start_bttn.place(x = 0, y = 270, width = 60, height = 50)
+        #
+        location_choose = tk.Label(window, text = "Mouse location", font = 20, bg = BACK_CLR)
+        location_choose.place(x = 360,y =5, width = 160, height = 30)
+
+        global location_x
+        location_x_label = tk.Label(window, text = "X",bg = BACK_CLR)
+        location_x_label.place(x = 380, y = 40,height = 18)
+        location_x = tk.Entry(window)
+        location_x.place(x = 395,y = 40, width = 50)
+
+        global location_y
+        location_y_label = tk.Label(window, text = "Y",bg = BACK_CLR)
+        location_y_label.place(x = 450, y = 40,height = 18)
+        location_y = tk.Entry(window)
+        location_y.place(x = 465,y = 40, width = 50)
+        #
+        #pretender = tk.Checkbutton(window,text = "Pretend to be online",bg = BACK_CLR)
+        #pretender.place(x = 350, y = 5)
         #
         window.mainloop()
 
 
     ### FUNC
+
     def update_mouse_pos():
         mouse_pos_label.config(text = mouse_c.position)
         mouse_pos_label.after(100,update_mouse_pos)
         pass
 
-    def start_cmmnd():
+    def switch_to_stop():
+        STARTED = True
+        #
+        start_bttn.destroy()
+        global stop_bttn
+        stop_bttn = tk.Button(window,text = "Stop", command = switch_to_start, bg = BACK_CLR, font = 20)
+        stop_bttn.place(x = 0, y = 270, width = 60, height = 50)
+        #
+        time_btwn_clcks_value = float(time_btwn_clcks.get())
+        if location_x == '' and location_y == '':
+            location_x_value = float(location_x.get())
+            location_y_value = float(location_y.get())
+        else:
+            print("No values for mouse mos")
+        print("Starded : ",STARTED)
+        print("Got value from time_btwn_clcks : {} \n".format(time_btwn_clcks_value))
+        pass
+
+    def switch_to_start():
+        STARTED = False
+        stop_bttn.destroy()
+        start_bttn = tk.Button(window,text = "Start", command = switch_to_stop,bg = BACK_CLR, font = 20)
+        start_bttn.place(x = 0, y = 270, width = 60, height = 50)
+        print("Starded : ",STARTED)
         pass
 
     ###
 
+    LOGIC()
     GUI()
     pass
 
