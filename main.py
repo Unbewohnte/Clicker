@@ -6,11 +6,6 @@ def main():
     mouse_c = mouse.Controller()
     keyboard_c = keyboard.Controller()
 
-    def LOGIC():
-        global STARTED
-        STARTED = False
-
-
 
     def GUI():
         global BACK_CLR
@@ -40,11 +35,11 @@ def main():
         time_btwn_clcks.place(x = 5,y = 0,width = 200)
         #
         global start_bttn
-        start_bttn = tk.Button(window,text = "Start",bg = BACK_CLR, font = 20) #, command = switch_to_stop
+        start_bttn = tk.Button(window,text = "Start",bg = BACK_CLR, font = 20, command = start) #, command = switch_to_stop
         start_bttn.place(x = 5, y = 268, width = 100, height = 50)
 
         global stop_bttn
-        stop_bttn = tk.Button(window, text = "Stop" , bg = BACK_CLR, font = 20, state = "disabled") #, command = switch_to_start
+        stop_bttn = tk.Button(window, text = "Stop" , bg = BACK_CLR, font = 20, state = "disabled", command = stop) #, command = switch_to_start
         stop_bttn.place(x = 110, y = 268, width = 100, height = 50)
         #
         location_choose = tk.Label(window, text = "Mouse location", font = 20, bg = BACK_CLR)
@@ -53,13 +48,15 @@ def main():
         global location_x
         location_x_label = tk.Label(window, text = "X",bg = BACK_CLR)
         location_x_label.place(x = 380, y = 40,height = 18)
-        location_x = tk.Entry(window)
+        location_x = tk.Entry(window,justify = "right")
+        location_x.insert(0,0)
         location_x.place(x = 395,y = 40, width = 50)
 
         global location_y
         location_y_label = tk.Label(window, text = "Y",bg = BACK_CLR)
         location_y_label.place(x = 450, y = 40,height = 18)
-        location_y = tk.Entry(window)
+        location_y = tk.Entry(window, justify = "right")
+        location_y.insert(0,0)
         location_y.place(x = 465,y = 40, width = 50)
         #
         #pretender = tk.Checkbutton(window,text = "Pretend to be online",bg = BACK_CLR)
@@ -75,36 +72,35 @@ def main():
         mouse_pos_label.after(100,update_mouse_pos)
         pass
 
-    # def switch_to_stop():
-    #     STARTED = True
-    #     #
-    #     start_bttn.destroy()
-    #     global stop_bttn
-    #     stop_bttn = tk.Button(window,text = "Stop", command = switch_to_start, bg = BACK_CLR, font = 20)
-    #     stop_bttn.place(x = 0, y = 270, width = 60, height = 50)
-    #     #
-    #     time_btwn_clcks_value = float(time_btwn_clcks.get())
-    #     if location_x == '' and location_y == '':
-    #         location_x_value = float(location_x.get())
-    #         location_y_value = float(location_y.get())
-    #     else:
-    #         print("No values for mouse mos")
-    #
-    #     print("Starded : ",STARTED)
-    #     print("Got value from time_btwn_clcks : {} \n".format(time_btwn_clcks_value))
-    #     pass
-    #
-    # def switch_to_start():
-    #     STARTED = False
-    #     stop_bttn.destroy()
-    #     start_bttn = tk.Button(window,text = "Start", command = switch_to_stop,bg = BACK_CLR, font = 20)
-    #     start_bttn.place(x = 0, y = 270, width = 60, height = 50)
-    #     print("Starded : ",STARTED)
-    #     pass
+    def stop():
+        print("Stopped \n")
+        start_bttn["state"] = "normal"
+        stop_bttn["state"] = "disabled"
+        pass
+
+    def start():
+        #time.sleep(5)
+        print("Started")
+        start_bttn["state"] = "disabled"
+        stop_bttn["state"] = "normal"
+
+        time_btwn_clcks_value = float(time_btwn_clcks.get())
+        try:
+            if float(location_x.get()) > 0 and float(location_y.get()) > 0:
+                location_x_value = float(location_x.get())
+                location_y_value = float(location_y.get())
+            else:
+                print("Entries are on default \n")
+        except Exception as e:
+            print("Error ! ",e)
+            location_x.delete(0,"end")
+            location_y.delete(0,"end")
+            location_x.insert(0,0)
+            location_y.insert(0,0)
+        pass
 
     ###
 
-    LOGIC()
     GUI()
     pass
 
