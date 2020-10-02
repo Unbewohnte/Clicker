@@ -42,6 +42,7 @@ def main():
         stop_bttn = tk.Button(window, text = "Stop" , bg = BACK_CLR, font = 20, state = "disabled", command = stop) #, command = switch_to_start
         stop_bttn.place(x = 110, y = 268, width = 100, height = 50)
         #
+
         location_choose = tk.Label(window, text = "Mouse location", font = 20, bg = BACK_CLR)
         location_choose.place(x = 360,y =5, width = 160, height = 30)
 
@@ -58,6 +59,9 @@ def main():
         location_y = tk.Entry(window, justify = "right")
         location_y.insert(0,0)
         location_y.place(x = 465,y = 40, width = 50)
+
+        entry_cleaner = tk.Button(window,text = "Clear",font = 14, command = clean_entries)
+        entry_cleaner.place(x = 520, y = 40 , width = 100, height = 20)
         #
         #pretender = tk.Checkbutton(window,text = "Pretend to be online",bg = BACK_CLR)
         #pretender.place(x = 350, y = 5)
@@ -72,6 +76,12 @@ def main():
         mouse_pos_label.after(100,update_mouse_pos)
         pass
 
+    def clean_entries():
+        location_x.delete(0,"end")
+        location_y.delete(0,"end")
+        location_x.insert(0,0)
+        location_y.insert(0,0)
+
     def stop():
         print("Stopped \n")
         start_bttn["state"] = "normal"
@@ -79,24 +89,28 @@ def main():
         pass
 
     def start():
-        #time.sleep(5)
         print("Started")
         start_bttn["state"] = "disabled"
         stop_bttn["state"] = "normal"
 
         time_btwn_clcks_value = float(time_btwn_clcks.get())
         try:
-            if float(location_x.get()) > 0 and float(location_y.get()) > 0:
+            if float(location_x.get()) != None and float(location_y.get()) != None:
                 location_x_value = float(location_x.get())
                 location_y_value = float(location_y.get())
-            else:
-                print("Entries are on default \n")
+
+                mouse_c.position = (location_x_value,location_y_value)
+                while mouse_c.position == (location_x_value,location_y_value):
+                    mouse_c.click(mouse.Button.left)
+                    time.sleep(time_btwn_clcks_value)
+                    pass
+                stop()
+
         except Exception as e:
             print("Error ! ",e)
-            location_x.delete(0,"end")
-            location_y.delete(0,"end")
-            location_x.insert(0,0)
-            location_y.insert(0,0)
+            clean_entries()
+            stop()
+
         pass
 
     ###
