@@ -32,7 +32,7 @@ def main():
         #
         global time_btwn_clcks
         time_btwn_clcks = tk.Scale(window, orient = "horizontal", resolution = -1,length = 9999999,
-                                   from_ = 0.001, to = 10 ,bg = BACK_CLR, font = 20,
+                                   from_ = 0.001, to = 1 ,bg = BACK_CLR, font = 20,
                                    label = "Click interval (seconds)")
         time_btwn_clcks.place(x = 5,y = 0,width = 200)
         #
@@ -65,6 +65,8 @@ def main():
         entry_cleaner = tk.Button(window,text = "Clear",font = 14, command = clean_entries)
         entry_cleaner.place(x = 380, y = 40 , width = 100, height = 20)
         #
+
+        location_x.focus_set()
 
         window.mainloop()
 
