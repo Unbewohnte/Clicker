@@ -32,7 +32,7 @@ def main():
         #
         global time_btwn_clcks
         time_btwn_clcks = tk.Scale(window, orient = "horizontal", resolution = -1,length = 9999999,
-                                   from_ = 0.005, to = 500 ,bg = BACK_CLR, font = 20,
+                                   from_ = 0.001, to = 10 ,bg = BACK_CLR, font = 20,
                                    label = "Click interval (seconds)")
         time_btwn_clcks.place(x = 5,y = 0,width = 200)
         #
